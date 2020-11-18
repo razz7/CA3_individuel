@@ -8,8 +8,12 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.HeroDTO;
+import entities.Role;
+import entities.Superhero;
+import entities.User;
 import facades.SuperHeroFacade;
 import javax.annotation.security.RolesAllowed;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -74,4 +78,41 @@ public class CreateResource {
         return GSON.toJson(FACADE.createHero(hDTO));
      
     }
+    
+    @GET
+    @Path("/createusers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void createuser() {
+        
+        EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
+        EntityManager em = emf.createEntityManager();
+
+        User user = new User("user", "123");
+        User admin = new User("admin", "1234");
+        User both = new User("user_admin", "12345");
+        
+        Superhero sh = new Superhero("Superman", "Stregth");
+
+
+        try {
+        em.getTransaction().begin();
+        Role userRole = new Role("user");
+        Role adminRole = new Role("admin");
+        user.addRole(userRole);
+        admin.addRole(adminRole);
+        both.addRole(userRole);
+        both.addRole(adminRole);
+        em.persist(userRole);
+        em.persist(adminRole);
+        em.persist(user);
+        em.persist(admin);
+        em.persist(both);
+        em.persist(sh);
+        em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        
+    }
+    
 }
