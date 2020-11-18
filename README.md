@@ -1,5 +1,5 @@
 
-
+[![Build Status](https://travis-ci.com/razz7/CA3_individuel.svg?branch=main)](https://travis-ci.com/razz7/CA3_individuel)
 ## How to use: 
 1. Clone;
 2. Change pom url
